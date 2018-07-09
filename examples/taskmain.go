@@ -4,13 +4,11 @@ import (
 	"fmt"
 	"sync/atomic"
 	"time"
-	"csp/common/timer"
+	"github.com/odwodw/autotask"
 	"reflect"
 )
 
-var quit chan int
 var sum int32 = 0
-var N int32 = 10
 var tt *gotimer.Timer
 var tmmap map[string] *(gotimer.Task)
 
@@ -50,11 +48,11 @@ func main() {
 	fmt.Println(tt)
 	
 	tmmap = make(map[string] *gotimer.Task)
-	atn := gotimer.NewTask("auto_report_time").Every(1).Do(now).Once().WorkTime("08:00 - 21:00")
+	atn := gotimer.NewTask("auto_report_time").Every(1).Do(now).Once().WorkTime("08:00 - 18:00").At("2018-07-09 18:44:40")
 	//atn := gotimer.NewTask("auto_report_time")
 	fmt.Println(atn)
 	tmmap["auto_report_time"] = atn
-	
+	/*
 	go func() {
 		time.Sleep(time.Second*10)
 		fmt.Println("Timer Resume...")
@@ -71,17 +69,14 @@ func main() {
 		fmt.Println("All Stop...")
 		tt.Stop()
 	}()
+	*/
 	
 	nowtime(0)
 	
 	//time.Sleep(time.Second*3)
-	tt.Start()
 	atn.AddToTimer(tt)
+	tt.Start()
 	for {	
 		time.Sleep(time.Hour*3)
-	}
-	
-	if sum != 10*N {
-		fmt.Println("failed")
 	}
 }
